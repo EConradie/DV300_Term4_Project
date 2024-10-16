@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { Colors } from "../Styles";
+import { Colors } from "../../Styles";
 import { Ionicons } from "@expo/vector-icons";
 import { LoginModal } from "./LoginModal";
 import { SignupModal } from "./SignupModal";
@@ -48,7 +48,7 @@ export const RegisterScreen = () => {
         {/* LOGO */}
         <View style={RegisterStyles.logoContainer}>
           <Image
-            source={require("../../assets/logo.png")}
+            source={require("../../../assets/logo.png")}
             style={RegisterStyles.logo}
           />
         </View>

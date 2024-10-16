@@ -13,25 +13,24 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from "react-native";
-import { Colors } from "../Styles";
+import { Colors } from "../../Styles";
 import { Ionicons } from "@expo/vector-icons";
 
-interface SignupModalProps {
+interface LoginModalProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
-export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
+export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState('');
 
-  const signup = () => {
-    setLoadingSubmit(false);
+  const login = () => {
+    setLoadingSubmit(true);
     onClose();
   };
 
@@ -40,31 +39,14 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
     <Modal
       visible={isVisible}
       transparent
-      animationType="slide"
+      animationType="slide" // Or use custom Animated API for more control
       onRequestClose={onClose}
     >
-    <View style={SignupStyles.modalBackground}>
+    <View style={LoginStyles.modalBackground}>
       {isLoading ? (
         <ActivityIndicator size="large" color={Colors.orange} />
       ) : (
-        <View style={SignupStyles.modalContainer}>
-
-          {/* USERNAME INPUT */}
-          <View style={InputStyle.container}>
-            <Ionicons
-              name="person-outline"
-              size={24}
-              color={Colors.icon}
-              style={InputStyle.Icon}
-            />
-            <TextInput
-              placeholder="Username"
-              placeholderTextColor="black"
-              onChangeText={(newText) => setUsername(newText)}
-              style={InputStyle.input}
-            />
-          </View>
-
+        <View style={LoginStyles.modalContainer}>
           {/* EMAIL INPUT */}
           <View style={InputStyle.container}>
             <Ionicons
@@ -110,22 +92,22 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
           </View>
 
           {/* BUTTON */}
-          <TouchableOpacity style={SignupStyles.button} onPress={signup}>
+          <TouchableOpacity style={LoginStyles.button} onPress={login}>
             {loadingSubmit ? (
               <ActivityIndicator size="small" color={Colors.white} />
             ) : (
-              <Text style={SignupStyles.buttonText}>SIGN UP</Text>
+              <Text style={LoginStyles.buttonText}>LOG IN</Text>
             )}
           </TouchableOpacity>
 
           {/* UNDERLINE */}
-          <View style={SignupStyles.underline}>
-            <Text style={SignupStyles.underlineText}>
-                Already have an account?
+          <View style={LoginStyles.underline}>
+            <Text style={LoginStyles.underlineText}>
+              Don't have an account?
             </Text>
             <Pressable onPress={() => onClose()}
               >
-              <Text style={SignupStyles.underlineButtonText}>Log in.</Text>
+              <Text style={LoginStyles.underlineButtonText}>Sign up.</Text>
             </Pressable>
           </View>
         </View>
@@ -163,7 +145,7 @@ const InputStyle = StyleSheet.create({
   },
 });
 
-const SignupStyles = StyleSheet.create({
+const LoginStyles = StyleSheet.create({
   modalContainer: {
     display: "flex",
     flexDirection: "column",
