@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../Styles"; // Assuming you have a Colors file for theme
+import { translateText } from '../../services/translateService';
+import { languages } from "../languages";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -29,17 +31,6 @@ export const TranslateScreen = () => {
     useState(false);
   const [isTargetLanguageModalVisible, setTargetLanguageModalVisible] =
     useState(false);
-
-  // Language list
-  const languages = [
-    "English",
-    "Spanish",
-    "French",
-    "German",
-    "Chinese",
-    "Japanese",
-    "Korean",
-  ];
 
   // Swap Languages
   const swapLanguages = () => {
@@ -64,16 +55,16 @@ export const TranslateScreen = () => {
           <Text style={styles.modalTitle}>Select Language</Text>
           <FlatList
             data={languages}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.code}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.languageItem}
                 onPress={() => {
-                  onSelectLanguage(item);
+                  onSelectLanguage(item.name);
                   onClose();
                 }}
               >
-                <Text style={styles.languageText}>{item}</Text>
+                <Text style={styles.languageText}>{item.name}</Text>
               </TouchableOpacity>
             )}
           />
@@ -142,13 +133,13 @@ export const TranslateScreen = () => {
               <Ionicons name="mic-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons name="copy-outline" size={24} color={Colors.white} />
+              <Ionicons name="volume-high-outline" size={24} color={Colors.white} />
+            </TouchableOpacity>
+            <TouchableOpacity >
+            <Ionicons name="copy-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setSourceText("")}>
-              <MaterialIcons name="clear" size={24} color={Colors.white} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="expand-outline" size={24} color={Colors.white} />
+            <MaterialIcons name="clear" size={24} color={Colors.white} />
             </TouchableOpacity>
           </View>
         </View>
@@ -183,17 +174,17 @@ export const TranslateScreen = () => {
 
           {/* Text Controls */}
           <View style={styles.textControls}>
-            <TouchableOpacity>
+          <TouchableOpacity>
               <Ionicons name="mic-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons name="copy-outline" size={24} color={Colors.white} />
+              <Ionicons name="volume-high-outline" size={24} color={Colors.white} />
+            </TouchableOpacity>
+            <TouchableOpacity >
+            <Ionicons name="copy-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setTargetText("")}>
-              <MaterialIcons name="clear" size={24} color={Colors.white} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons name="expand-outline" size={24} color={Colors.white} />
+            <MaterialIcons name="clear" size={24} color={Colors.white} />
             </TouchableOpacity>
           </View>
         </View>
@@ -307,9 +298,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "rgba(0, 0, 0, 0.7)",
+    paddingVertical: 100,
+    paddingHorizontal: 20,
   },
   modalContent: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.darkGray,
     marginHorizontal: 20,
     borderRadius: 10,
     padding: 20,
@@ -318,6 +311,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    color: Colors.white,
   },
   languageItem: {
     padding: 15,
@@ -326,6 +320,7 @@ const styles = StyleSheet.create({
   },
   languageText: {
     fontSize: 18,
+    color: Colors.white,
   },
   textControls: {
     flexDirection: "row",
