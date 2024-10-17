@@ -167,7 +167,7 @@ export const TranslateScreen = () => {
               <TouchableOpacity>
                 <Ionicons name="mic-outline" size={24} color={Colors.white} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handlePlayAudio(sourceText, sourceLanguage)}>
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
