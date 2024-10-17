@@ -15,6 +15,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../Styles";
 import { translateText } from "../../services/translateService";
 import { languages } from "../languages";
+import { playAudio } from "../../services/ttsService";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -49,6 +50,19 @@ export const TranslateScreen = () => {
       console.error("Error during translation:", error);
       setTargetText("Translation failed. Please try again.");
       console.log(sourceText, sourceLanguage.code, targetLanguage.code);
+    }
+  };
+
+  // Play Audio
+  const handlePlayAudio = async (text: string, language: { name: string, code: string }) => {
+    if (!text.trim()) {
+      return;
+    }
+
+    try {
+      await playAudio(text, language.code);
+    } catch (error) {
+      console.error("Error playing audio:", error);
     }
   };
 
@@ -199,10 +213,7 @@ export const TranslateScreen = () => {
 
             {/* Text Controls */}
             <View style={styles.textControls}>
-              <TouchableOpacity>
-                <Ionicons name="mic-outline" size={24} color={Colors.white} />
-              </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handlePlayAudio(targetText, targetLanguage)}>
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
