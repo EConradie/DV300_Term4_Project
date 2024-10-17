@@ -1,7 +1,6 @@
-import { GOOGLE_TRANSLATION_API_KEY } from '@env';
 import axios from 'axios';
 
-const API_KEY = GOOGLE_TRANSLATION_API_KEY;
+const API_KEY = process.env.EXPO_PUBLIC_GOOGLE_TRANSLATION_API_KEY;
 
 const GOOGLE_TRANSLATE_URL = `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`;
 
