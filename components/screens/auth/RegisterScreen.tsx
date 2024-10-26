@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { Colors } from "../../Styles";
+import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 import { LoginModal } from "./LoginModal";
 import { SignupModal } from "./SignupModal";
@@ -94,7 +94,7 @@ const RegisterStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
   },
   logoContainer: {
     display: "flex",
@@ -103,13 +103,13 @@ const RegisterStyles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    color: Colors.white,
+    color: colors.white,
     fontWeight: "300",
     fontSize: 20,
     marginBottom: 5,
   },
   titleText: {
-    color: Colors.white,
+    color: colors.white,
     fontWeight: "600",
     fontSize: 30,
     marginBottom: 5,
@@ -133,9 +133,9 @@ const RegisterStyles = StyleSheet.create({
     width: 170,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderWidth: 2,
-    borderColor: Colors.black,
+    borderColor: colors.black,
   },
   buttonLogin: {
     display: "flex",
@@ -145,17 +145,17 @@ const RegisterStyles = StyleSheet.create({
     width: 170,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
     borderWidth: 2,
-    borderColor: Colors.white,
+    borderColor: colors.white,
   },
   buttonTextLogin: {
-    color: Colors.white,
+    color: colors.white,
     fontWeight: "600",
     letterSpacing: 0.5,
   },
   buttonTextSignup: {
-    color: Colors.black,
+    color: colors.black,
     fontWeight: "600",
     letterSpacing: 0.5,
   },
@@ -179,11 +179,11 @@ const RegisterStyles = StyleSheet.create({
     gap: 5,
   },
   underlineText: {
-    color: Colors.white,
+    color: colors.white,
     fontSize: 16,
   },
   underlineButtonText: {
-    color: Colors.orange,
+    color: colors.orange,
     fontSize: 16,
   },
 });

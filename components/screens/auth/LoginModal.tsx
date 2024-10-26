@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from "react-native";
-import { Colors } from "../../Styles";
+import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 
 interface LoginModalProps {
@@ -39,12 +39,12 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
     <Modal
       visible={isVisible}
       transparent
-      animationType="slide" // Or use custom Animated API for more control
+      animationType="slide"
       onRequestClose={onClose}
     >
     <View style={LoginStyles.modalBackground}>
       {isLoading ? (
-        <ActivityIndicator size="large" color={Colors.orange} />
+        <ActivityIndicator size="large" color={colors.orange} />
       ) : (
         <View style={LoginStyles.modalContainer}>
           {/* EMAIL INPUT */}
@@ -52,7 +52,7 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
             <Ionicons
               name="mail-outline"
               size={24}
-              color={Colors.icon}
+              color={colors.icon}
               style={InputStyle.Icon}
             />
             <TextInput
@@ -68,7 +68,7 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
             <Ionicons
               name="lock-closed-outline"
               size={24}
-              color={Colors.icon}
+              color={colors.icon}
               style={InputStyle.Icon}
             />
             <TextInput
@@ -86,7 +86,7 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
               <Ionicons
                 name={passwordVisible ? "eye-off-outline" : "eye-outline"}
                 size={24}
-                color={Colors.icon}
+                color={colors.icon}
               />
             </TouchableOpacity>
           </View>
@@ -94,7 +94,7 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
           {/* BUTTON */}
           <TouchableOpacity style={LoginStyles.button} onPress={login}>
             {loadingSubmit ? (
-              <ActivityIndicator size="small" color={Colors.white} />
+              <ActivityIndicator size="small" color={colors.white} />
             ) : (
               <Text style={LoginStyles.buttonText}>LOG IN</Text>
             )}
@@ -125,14 +125,14 @@ const InputStyle = StyleSheet.create({
     height: 60,
     width: 350,
     borderRadius: 30,
-    color: Colors.black,
-    backgroundColor: Colors.lightGray,
+    color: colors.black,
+    backgroundColor: colors.lightGray,
     gap: 20,
     paddingLeft: 20,
   },
   Icon: {},
   input: {
-    color: Colors.black,
+    color: colors.black,
     alignSelf: "center",
     width: 350,
     height: "100%",
@@ -162,11 +162,11 @@ const LoginStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: 30,
   },
   text: {
-    color: Colors.white,
+    color: colors.white,
   },
   logo: {
     width: 200,
@@ -182,10 +182,10 @@ const LoginStyles = StyleSheet.create({
     width: 350,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
   },
   buttonText: {
-    color: Colors.white,
+    color: colors.white,
     fontWeight: "600",
     letterSpacing: 0.5,
   },
@@ -201,11 +201,11 @@ const LoginStyles = StyleSheet.create({
     gap: 5,
   },
   underlineText: {
-    color: Colors.black,
+    color: colors.black,
     fontSize: 16,
   },
   underlineButtonText: {
-    color: Colors.blue,
+    color: colors.blue,
     fontSize: 16,
   },
 });

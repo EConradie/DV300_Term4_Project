@@ -10,7 +10,7 @@ const setAudio = async () => {
   });
 };
 
-const API_KEY = "";
+const API_KEY = 'AIzaSyDNmkPdi1qslqfoXJy6rhJ0i2FinN6957U';
 const GOOGLE_URL = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`;
 
 export const playAudio = async (text: string, languageCode: string) => {

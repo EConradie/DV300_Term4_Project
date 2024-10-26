@@ -7,20 +7,26 @@ import { auth } from "../config/firebase";
 import { db } from "../config/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-export const handleLogin = (email, password) => {
+interface User {
+  uid: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+export const handleLogin = ({ email, password } : User ) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log("Logged in user: " + user.email);
     })
     .catch((error) => {
-      const errorCode = error.code;
       const errorMessage = error.message;
       console.log("Error: " + errorMessage);
     });
 };
 
-export const handleSignup = (username, email, password) => {
+export const handleSignup = ({username, email, password} : User) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -44,7 +50,6 @@ export const handleSignup = (username, email, password) => {
         });
     })
     .catch((error) => {
-      const errorCode = error.code;
       const errorMessage = error.message;
       console.log("Error: " + errorMessage);
     });

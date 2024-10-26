@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from "react-native";
-import { Colors } from "../../Styles";
+import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 
 interface SignupModalProps {
@@ -45,7 +45,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
     >
     <View style={SignupStyles.modalBackground}>
       {isLoading ? (
-        <ActivityIndicator size="large" color={Colors.orange} />
+        <ActivityIndicator size="large" color={colors.orange} />
       ) : (
         <View style={SignupStyles.modalContainer}>
 
@@ -54,7 +54,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
             <Ionicons
               name="person-outline"
               size={24}
-              color={Colors.icon}
+              color={colors.icon}
               style={InputStyle.Icon}
             />
             <TextInput
@@ -70,7 +70,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
             <Ionicons
               name="mail-outline"
               size={24}
-              color={Colors.icon}
+              color={colors.icon}
               style={InputStyle.Icon}
             />
             <TextInput
@@ -86,7 +86,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
             <Ionicons
               name="lock-closed-outline"
               size={24}
-              color={Colors.icon}
+              color={colors.icon}
               style={InputStyle.Icon}
             />
             <TextInput
@@ -104,7 +104,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
               <Ionicons
                 name={passwordVisible ? "eye-off-outline" : "eye-outline"}
                 size={24}
-                color={Colors.icon}
+                color={colors.icon}
               />
             </TouchableOpacity>
           </View>
@@ -112,7 +112,7 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
           {/* BUTTON */}
           <TouchableOpacity style={SignupStyles.button} onPress={signup}>
             {loadingSubmit ? (
-              <ActivityIndicator size="small" color={Colors.white} />
+              <ActivityIndicator size="small" color={colors.white} />
             ) : (
               <Text style={SignupStyles.buttonText}>SIGN UP</Text>
             )}
@@ -143,14 +143,14 @@ const InputStyle = StyleSheet.create({
     height: 60,
     width: 350,
     borderRadius: 30,
-    color: Colors.black,
-    backgroundColor: Colors.lightGray,
+    color: colors.black,
+    backgroundColor: colors.lightGray,
     gap: 20,
     paddingLeft: 20,
   },
   Icon: {},
   input: {
-    color: Colors.black,
+    color: colors.black,
     alignSelf: "center",
     width: 350,
     height: "100%",
@@ -180,11 +180,11 @@ const SignupStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: colors.white,
     borderRadius: 30,
   },
   text: {
-    color: Colors.white,
+    color: colors.white,
   },
   logo: {
     width: 200,
@@ -200,10 +200,10 @@ const SignupStyles = StyleSheet.create({
     width: 350,
     height: 60,
     borderRadius: 30,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
   },
   buttonText: {
-    color: Colors.white,
+    color: colors.white,
     fontWeight: "600",
     letterSpacing: 0.5,
   },
@@ -219,11 +219,11 @@ const SignupStyles = StyleSheet.create({
     gap: 5,
   },
   underlineText: {
-    color: Colors.black,
+    color: colors.black,
     fontSize: 16,
   },
   underlineButtonText: {
-    color: Colors.blue,
+    color: colors.blue,
     fontSize: 16,
   },
 });

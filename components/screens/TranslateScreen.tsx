@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Colors } from "../Styles";
+import { colors } from "../styles";
 import { translateText } from "../../services/translateService";
 import { languages } from "../languages";
 import { playAudio } from "../../services/ttsService";
@@ -129,7 +129,7 @@ export const TranslateScreen = () => {
               <Ionicons
                 name="swap-horizontal-outline"
                 size={32}
-                color={Colors.white}
+                color={colors.white}
               />
             </TouchableOpacity>
 
@@ -154,7 +154,7 @@ export const TranslateScreen = () => {
             <View style={styles.textInputContainer}>
               <TextInput
                 placeholder="Type here..."
-                placeholderTextColor={Colors.gray}
+                placeholderTextColor={colors.gray}
                 multiline={true}
                 value={sourceText}
                 onChangeText={setSourceText}
@@ -165,20 +165,20 @@ export const TranslateScreen = () => {
             {/* Text Controls */}
             <View style={styles.textControls}>
               <TouchableOpacity>
-                <Ionicons name="mic-outline" size={24} color={Colors.white} />
+                <Ionicons name="mic-outline" size={24} color={colors.white} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handlePlayAudio(sourceText, sourceLanguage)}>
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
-                  color={Colors.white}
+                  color={colors.white}
                 />
               </TouchableOpacity>
               <TouchableOpacity>
-                <Ionicons name="copy-outline" size={24} color={Colors.white} />
+                <Ionicons name="copy-outline" size={24} color={colors.white} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setSourceText("")}>
-                <MaterialIcons name="clear" size={24} color={Colors.white} />
+                <MaterialIcons name="clear" size={24} color={colors.white} />
               </TouchableOpacity>
             </View>
           </View>
@@ -189,7 +189,7 @@ export const TranslateScreen = () => {
               <Ionicons
                 name="swap-vertical-outline"
                 size={32}
-                color={Colors.white}
+                color={colors.white}
               />
             </TouchableOpacity>
           </View>
@@ -203,7 +203,7 @@ export const TranslateScreen = () => {
             <View style={styles.textInputContainer}>
               <TextInput
                 placeholder="Type here..."
-                placeholderTextColor={Colors.gray}
+                placeholderTextColor={colors.gray}
                 multiline={true}
                 value={targetText}
                 onChangeText={setTargetText}
@@ -217,14 +217,14 @@ export const TranslateScreen = () => {
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
-                  color={Colors.white}
+                  color={colors.white}
                 />
               </TouchableOpacity>
               <TouchableOpacity>
-                <Ionicons name="copy-outline" size={24} color={Colors.white} />
+                <Ionicons name="copy-outline" size={24} color={colors.white} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setTargetText("")}>
-                <MaterialIcons name="clear" size={24} color={Colors.white} />
+                <MaterialIcons name="clear" size={24} color={colors.white} />
               </TouchableOpacity>
             </View>
           </View>
@@ -266,7 +266,7 @@ export const TranslateScreen = () => {
               with examples in both languages.
             </Text>
           </View>
-          {/* Add more breakdowns dynamically in the future */}
+  
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
@@ -276,7 +276,7 @@ export const TranslateScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: Colors.white,
+    color: colors.white,
   },
   languageSelectorContainer: {
     flexDirection: "row",
@@ -296,13 +296,13 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   languageSelector: {
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
   },
   languageSelectorText: {
-    color: Colors.white,
+    color: colors.white,
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -319,20 +319,20 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     paddingHorizontal: 15,
     paddingVertical: 10,
   },
   textInput: {
     flex: 1,
-    color: Colors.white,
+    color: colors.white,
     fontSize: 16,
   },
   languageContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingTop: 10,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   },
   languageLabel: {
     fontSize: 16,
-    color: Colors.lightGray,
+    color: colors.lightGray,
   },
   modalContainer: {
     flex: 1,
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   modalContent: {
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     marginHorizontal: 20,
     borderRadius: 10,
     padding: 20,
@@ -360,21 +360,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
-    color: Colors.white,
+    color: colors.white,
   },
   languageItem: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lightGray,
+    borderBottomColor: colors.lightGray,
   },
   languageText: {
     fontSize: 18,
-    color: Colors.white,
+    color: colors.white,
   },
   textControls: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     borderRadius: 10,
     padding: 15,
     borderTopStartRadius: 0,
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   swapContainer: {
     alignItems: "center",
     marginVertical: 10,
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     borderRadius: 10,
   },
   swapButton: {
@@ -391,36 +391,36 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   translateButton: {
-    backgroundColor: Colors.blue,
+    backgroundColor: colors.blue,
     paddingVertical: 15,
     borderRadius: 30,
     alignItems: "center",
     marginTop: 20,
   },
   translateButtonText: {
-    color: Colors.white,
+    color: colors.white,
     fontSize: 18,
     fontWeight: "bold",
   },
   contextSection: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: colors.black,
   },
   contextTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: Colors.white,
+    color: colors.white,
     marginBottom: 10,
     marginTop: 10,
   },
   contextCard: {
-    backgroundColor: Colors.darkGray,
+    backgroundColor: colors.darkGray,
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
   },
   contextText: {
     fontSize: 16,
-    color: Colors.white,
+    color: colors.white,
   },
 });
