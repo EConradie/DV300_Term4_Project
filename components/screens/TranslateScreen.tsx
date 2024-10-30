@@ -17,6 +17,7 @@ import { translateText } from "../../services/translateService";
 import { languages } from "../languages";
 import { playAudio } from "../../services/ttsService";
 import { RecordModal } from "../modals/RecordModal";
+import { sendToChatGPT } from "../../services/chatGPTService";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -27,6 +28,7 @@ interface renderLanguageModalProps {
 export const TranslateScreen = () => {
   const [sourceText, setSourceText] = useState("");
   const [targetText, setTargetText] = useState("");
+  const [chatGPTResponse, setChatGPTResponse] = useState("");
 
   const [sourceLanguage, setSourceLanguage] = useState({
     name: "English",
@@ -48,6 +50,7 @@ export const TranslateScreen = () => {
   const handleTranslate = async () => {
     if (!sourceText.trim()) {
       setTargetText("");
+      setChatGPTResponse(""); // Clear previous response if any
       return;
     }
 
@@ -58,10 +61,12 @@ export const TranslateScreen = () => {
         targetLanguage.code
       );
       setTargetText(translatedText);
+      // Now call Dialogflow function
+      const response = await sendToChatGPT(sourceText, translatedText);
+      setChatGPTResponse(response); // Update state with Dialogflow response
     } catch (error) {
       console.error("Error during translation:", error);
       setTargetText("Translation failed. Please try again.");
-      console.log(sourceText, sourceLanguage.code, targetLanguage.code);
     }
   };
 
@@ -289,19 +294,17 @@ export const TranslateScreen = () => {
         {/* Word Context and Breakdown Section */}
         <ScrollView style={styles.contextSection}>
           <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
-          <View style={styles.contextCard}>
-            <Text style={styles.contextText}>
-              Word: Lorem Ipsum - A detailed explanation of this word in various
-              contexts and its meanings in both languages.
-            </Text>
-          </View>
-
-          <View style={styles.contextCard}>
-            <Text style={styles.contextText}>
-              Word: Dolor Sit Amet - An AI-generated breakdown of its usage,
-              with examples in both languages.
-            </Text>
-          </View>
+          {chatGPTResponse ? (
+            <View style={styles.contextCard}>
+              <Text style={styles.contextText}>{chatGPTResponse}</Text>
+            </View>
+          ) : (
+            <View style={styles.contextCard}>
+              <Text style={styles.contextText}>
+                No detailed breakdown available.
+              </Text>
+            </View>
+          )}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
