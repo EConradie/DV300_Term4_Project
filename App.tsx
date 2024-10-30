@@ -6,10 +6,13 @@ import { TranslateScreen } from "./components/screens/TranslateScreen";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Import an icon library
 import { colors } from "./components/styles";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase";
+import { useEffect, useState } from "react";
 
 const Drawer = createDrawerNavigator();
 
-export default function App() {
+function LoggedInNavigation() {
   return (
     <NavigationContainer theme={DarkTheme}>
       <Drawer.Navigator
@@ -18,22 +21,43 @@ export default function App() {
           headerShown: true,
           headerStyle: {
             backgroundColor: colors.black,
-            elevation: 0, 
-            shadowOpacity: 0, 
-            borderBottomWidth: 0, 
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
           },
           headerTintColor: colors.white,
           headerTitle: "",
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Ionicons name="menu" size={24} color="white" style={{ marginLeft: 15 }} />
+              <Ionicons
+                name="menu"
+                size={24}
+                color="white"
+                style={{ marginLeft: 15 }}
+              />
             </TouchableOpacity>
           ),
         })}
       >
         <Drawer.Screen name="Translate" component={TranslateScreen} />
-        <Drawer.Screen name="Register" component={RegisterScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
+}
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return isLoggedIn ? <LoggedInNavigation /> : <RegisterScreen />;
 }
