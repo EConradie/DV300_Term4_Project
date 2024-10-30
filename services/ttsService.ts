@@ -51,3 +51,30 @@ export const playAudio = async (text: string, languageCode: string) => {
     console.log("Error in TTS: " + error);
   }
 };
+
+export const SpeechToText = async (audioUri: string) => {
+  const audioFile = await FileSystem.readAsStringAsync(audioUri, { encoding: FileSystem.EncodingType.Base64 });
+
+  // Configuration for the Google Speech-to-Text API
+  const response = await axios.post(
+      `https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}`,
+      {
+          audio: {
+              content: audioFile,
+          },
+          config: {
+              encoding: 'LINEAR16',
+              sampleRateHertz: 16000,
+              languageCode: 'en-US',
+          },
+      }
+  );
+
+  // Handle the response
+  const transcript = response.data.results
+    .map((result: any) => result.alternatives[0].transcript)
+    .join('\n');
+
+  console.log(transcript);
+  return transcript;
+};

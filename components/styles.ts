@@ -6,5 +6,7 @@ export const colors = {
     gray: "#818181",
     lightGray: "#EDEDED",
     icon: "black",
-    blue: "#3E5EF8"
+    blue: "#3E5EF8",
+    red: "#FF0000",
+    tintGray: "#333335",
   };

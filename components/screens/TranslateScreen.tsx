@@ -16,25 +16,33 @@ import { colors } from "../styles";
 import { translateText } from "../../services/translateService";
 import { languages } from "../languages";
 import { playAudio } from "../../services/ttsService";
+import { RecordModal } from "../modals/RecordModal";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onSelectLanguage: (language: { name: string, code: string }) => void;
+  onSelectLanguage: (language: { name: string; code: string }) => void;
 }
 
 export const TranslateScreen = () => {
   const [sourceText, setSourceText] = useState("");
   const [targetText, setTargetText] = useState("");
 
-  const [sourceLanguage, setSourceLanguage] = useState({ name: "English", code: "en" });
-  const [targetLanguage, setTargetLanguage] = useState({ name: "Spanish", code: "es" });
+  const [sourceLanguage, setSourceLanguage] = useState({
+    name: "English",
+    code: "en",
+  });
+  const [targetLanguage, setTargetLanguage] = useState({
+    name: "Spanish",
+    code: "es",
+  });
 
   // Modal state
   const [isSourceLanguageModalVisible, setSourceLanguageModalVisible] =
     useState(false);
   const [isTargetLanguageModalVisible, setTargetLanguageModalVisible] =
     useState(false);
+  const [isRecordingModalVisible, setRecordingModalVisible] = useState(false);
 
   // Translate the text
   const handleTranslate = async () => {
@@ -44,8 +52,12 @@ export const TranslateScreen = () => {
     }
 
     try {
-      const translatedText = await translateText(sourceText, sourceLanguage.code, targetLanguage.code);
-      setTargetText(translatedText); 
+      const translatedText = await translateText(
+        sourceText,
+        sourceLanguage.code,
+        targetLanguage.code
+      );
+      setTargetText(translatedText);
     } catch (error) {
       console.error("Error during translation:", error);
       setTargetText("Translation failed. Please try again.");
@@ -54,7 +66,10 @@ export const TranslateScreen = () => {
   };
 
   // Play Audio
-  const handlePlayAudio = async (text: string, language: { name: string, code: string }) => {
+  const handlePlayAudio = async (
+    text: string,
+    language: { name: string; code: string }
+  ) => {
     if (!text.trim()) {
       return;
     }
@@ -121,7 +136,9 @@ export const TranslateScreen = () => {
               onPress={() => setSourceLanguageModalVisible(true)}
               style={styles.languageSelector}
             >
-              <Text style={styles.languageSelectorText}>{sourceLanguage.name}</Text>
+              <Text style={styles.languageSelectorText}>
+                {sourceLanguage.name}
+              </Text>
             </TouchableOpacity>
 
             {/* Swap Icon */}
@@ -138,7 +155,9 @@ export const TranslateScreen = () => {
               onPress={() => setTargetLanguageModalVisible(true)}
               style={styles.languageSelector}
             >
-              <Text style={styles.languageSelectorText}>{targetLanguage.name}</Text>
+              <Text style={styles.languageSelectorText}>
+                {targetLanguage.name}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -164,10 +183,18 @@ export const TranslateScreen = () => {
 
             {/* Text Controls */}
             <View style={styles.textControls}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setRecordingModalVisible(true)}>
                 <Ionicons name="mic-outline" size={24} color={colors.white} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handlePlayAudio(sourceText, sourceLanguage)}>
+
+              <RecordModal
+                isVisible={isRecordingModalVisible}
+                onClose={() => setRecordingModalVisible(false)}
+              />
+
+              <TouchableOpacity
+                onPress={() => handlePlayAudio(sourceText, sourceLanguage)}
+              >
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
@@ -213,7 +240,9 @@ export const TranslateScreen = () => {
 
             {/* Text Controls */}
             <View style={styles.textControls}>
-              <TouchableOpacity onPress={() => handlePlayAudio(targetText, targetLanguage)}>
+              <TouchableOpacity
+                onPress={() => handlePlayAudio(targetText, targetLanguage)}
+              >
                 <Ionicons
                   name="volume-high-outline"
                   size={24}
@@ -266,7 +295,6 @@ export const TranslateScreen = () => {
               with examples in both languages.
             </Text>
           </View>
-  
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
