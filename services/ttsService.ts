@@ -67,7 +67,8 @@ export const SpeechToText = async (audioUri: string, languageCode: string) => {
         config: {
           encoding: 'LINEAR16',
           sampleRateHertz: 44100,
-          
+          languageCode: languageCode,
+          enableAutomaticPunctuation: true,
         },
       }
     );

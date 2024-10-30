@@ -173,7 +173,7 @@ export const TranslateScreen = () => {
         </View>
 
         {/* Input and Translation Comparison Section */}
-        <View style={styles.inputSection}>
+        <ScrollView style={styles.inputSection}>
           {/* Source Language Input */}
           <View style={styles.inputContainer}>
             <View style={styles.languageContainer}>
@@ -269,15 +269,39 @@ export const TranslateScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
 
-        {/* Translate Button */}
-        <TouchableOpacity
-          style={styles.translateButton}
-          onPress={handleTranslate}
-        >
-          <Text style={styles.translateButtonText}>Translate</Text>
-        </TouchableOpacity>
+          {/* Translate Button */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.translateButton}
+              onPress={handleTranslate}
+            >
+              <Text style={styles.translateButtonText}>Translate</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={handleTranslate}
+            >
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Word Context and Breakdown Section */}
+          <View style={styles.contextSection}>
+            <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
+            {chatGPTResponse ? (
+              <View style={styles.contextCard}>
+                <Text style={styles.contextText}>{chatGPTResponse}</Text>
+              </View>
+            ) : (
+              <View style={styles.contextCard}>
+                <Text style={styles.contextText}>
+                  No detailed breakdown available.
+                </Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
 
         {/* Modals for selecting languages */}
         {renderLanguageModal({
@@ -290,22 +314,6 @@ export const TranslateScreen = () => {
           onClose: () => setTargetLanguageModalVisible(false),
           onSelectLanguage: (language) => setTargetLanguage(language),
         })}
-
-        {/* Word Context and Breakdown Section */}
-        <ScrollView style={styles.contextSection}>
-          <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
-          {chatGPTResponse ? (
-            <View style={styles.contextCard}>
-              <Text style={styles.contextText}>{chatGPTResponse}</Text>
-            </View>
-          ) : (
-            <View style={styles.contextCard}>
-              <Text style={styles.contextText}>
-                No detailed breakdown available.
-              </Text>
-            </View>
-          )}
-        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -427,11 +435,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   translateButton: {
+    flex: 1,
     backgroundColor: colors.blue,
     paddingVertical: 15,
-    borderRadius: 30,
+    borderRadius: 15,
     alignItems: "center",
     marginTop: 20,
+    marginHorizontal: 5,
   },
   translateButtonText: {
     color: colors.white,
@@ -447,7 +457,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.white,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 20,
   },
   contextCard: {
     backgroundColor: colors.darkGray,
@@ -459,4 +469,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.white,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  saveButton: {
+    flex: 1,
+    backgroundColor: colors.tintGray,
+    paddingVertical: 15,
+    borderRadius: 15,
+    alignItems: "center",
+    marginTop: 20,
+    marginHorizontal: 5,
+  },
+  saveButtonText: {
+    color: colors.white,
+    fontSize: 18,
+    fontWeight: "bold",
+  }
 });

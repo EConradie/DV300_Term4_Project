@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import { RegisterScreen } from "./components/screens/auth/RegisterScreen";
 import { TranslateScreen } from "./components/screens/TranslateScreen";
+import { SavedTranslations } from "./components/screens/SavedTranslations";
+import { DetailedTranslation } from "./components/screens/DetailedTranslation";
 import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Import an icon library
+import { Ionicons } from "@expo/vector-icons";
 import { colors } from "./components/styles";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
-import { useEffect, useState } from "react";
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+function TranslateStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SavedTranslation" component={SavedTranslations} options={{ headerShown: false }} />
+      <Stack.Screen name="DetailedTranslation" component={DetailedTranslation} options={{ headerShown: false }}   />
+    </Stack.Navigator>
+  );
+}
 
 function LoggedInNavigation() {
   return (
@@ -40,6 +52,7 @@ function LoggedInNavigation() {
         })}
       >
         <Drawer.Screen name="Translate" component={TranslateScreen} />
+        <Drawer.Screen name="Saved Translations" component={TranslateStack} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -50,11 +63,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
+      setIsLoggedIn(!!user);
     });
     return () => unsubscribe();
   }, []);
