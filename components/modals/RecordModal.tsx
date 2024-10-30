@@ -10,13 +10,23 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import { colors } from "../styles";
+import { SpeechToText } from "../../services/ttsService";
+
+
 
 type RecordModalProps = {
   isVisible: boolean;
   onClose: () => void;
+  onTranscriptionComplete: (transcript: string) => void;
+  languageCode: string;
 };
 
-export const RecordModal = ({ isVisible, onClose }: RecordModalProps) => {
+export const RecordModal = ({
+  isVisible,
+  onClose,
+  onTranscriptionComplete,
+  languageCode,
+}: RecordModalProps) => {
   const [recording, setRecording] = useState<Audio.Recording | undefined>();
   const [isRecordingActive, setIsRecordingActive] = useState(false);
   const [permissionResponse, requestPermission] = Audio.usePermissions();
@@ -41,9 +51,26 @@ export const RecordModal = ({ isVisible, onClose }: RecordModalProps) => {
       });
 
       console.log("Starting recording..");
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
+      const { recording } = await Audio.Recording.createAsync({
+        isMeteringEnabled: true,
+        android: {
+          ...Audio.RecordingOptionsPresets.HIGH_QUALITY.android,
+          extension: '.wav',
+          sampleRate: 44100,
+          outputFormat: Audio.AndroidOutputFormat.DEFAULT,
+          audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
+        },
+        ios: {
+          ...Audio.RecordingOptionsPresets.HIGH_QUALITY.ios,
+          extension: '.wav',
+          sampleRate: 44100,
+          outputFormat: Audio.IOSOutputFormat.LINEARPCM,
+        },
+        web: {
+          mimeType: 'audio/wav',
+          bitsPerSecond: 128000,
+        },
+      });
       setRecording(recording);
       setIsRecordingActive(true);
       console.log("Recording started");
@@ -59,6 +86,13 @@ export const RecordModal = ({ isVisible, onClose }: RecordModalProps) => {
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
         console.log("Recording stopped and stored at", uri);
+
+        if (uri) {
+          const transcript = await SpeechToText(uri, languageCode);
+          console.log(transcript);
+          onTranscriptionComplete(transcript);
+        }
+        
       } catch (err) {
         console.error("Failed to stop recording", err);
       }

@@ -65,6 +65,11 @@ export const TranslateScreen = () => {
     }
   };
 
+  //Set source text
+  const handleSetSourceText = (text: string) => {
+    setSourceText(text);
+  };
+
   // Play Audio
   const handlePlayAudio = async (
     text: string,
@@ -190,6 +195,8 @@ export const TranslateScreen = () => {
               <RecordModal
                 isVisible={isRecordingModalVisible}
                 onClose={() => setRecordingModalVisible(false)}
+                onTranscriptionComplete={handleSetSourceText}
+                languageCode={sourceLanguage.code}
               />
 
               <TouchableOpacity

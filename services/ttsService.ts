@@ -2,6 +2,7 @@ import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
 import { Buffer } from "buffer";
+import { languages } from "../components/languages";
 
 const setAudio = async () => {
   await Audio.requestPermissionsAsync();
@@ -52,29 +53,35 @@ export const playAudio = async (text: string, languageCode: string) => {
   }
 };
 
-export const SpeechToText = async (audioUri: string) => {
-  const audioFile = await FileSystem.readAsStringAsync(audioUri, { encoding: FileSystem.EncodingType.Base64 });
+export const SpeechToText = async (audioUri: string, languageCode: string) => {
+  try {
 
-  // Configuration for the Google Speech-to-Text API
-  const response = await axios.post(
+    const audioFile = await FileSystem.readAsStringAsync(audioUri, { encoding: FileSystem.EncodingType.Base64 });
+
+    const response = await axios.post(
       `https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}`,
       {
-          audio: {
-              content: audioFile,
-          },
-          config: {
-              encoding: 'LINEAR16',
-              sampleRateHertz: 16000,
-              languageCode: 'en-US',
-          },
+        audio: {
+          content: audioFile,
+        },
+        config: {
+          encoding: 'LINEAR16',
+          sampleRateHertz: 44100,
+          
+        },
       }
-  );
+    );
 
-  // Handle the response
-  const transcript = response.data.results
-    .map((result: any) => result.alternatives[0].transcript)
-    .join('\n');
+    console.log("Google API Response:", JSON.stringify(response.data, null, 2));
 
-  console.log(transcript);
-  return transcript;
+    const transcript = response.data.results
+      .map((result: any) => result.alternatives[0].transcript)
+      .join('\n');
+
+    console.log("Transcript:", transcript);
+    return transcript;
+  } catch (error) {
+    console.error("Error in SpeechToText:", error);
+    throw error; 
+  }
 };
