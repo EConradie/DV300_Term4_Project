@@ -10,6 +10,7 @@ import {
   FlatList,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { colors } from "../styles";
@@ -30,6 +31,8 @@ export const TranslateScreen = () => {
   const [sourceText, setSourceText] = useState("");
   const [targetText, setTargetText] = useState("");
   const [chatGPTResponse, setChatGPTResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const [sourceLanguage, setSourceLanguage] = useState({
     name: "English",
@@ -47,13 +50,15 @@ export const TranslateScreen = () => {
     useState(false);
   const [isRecordingModalVisible, setRecordingModalVisible] = useState(false);
 
-  // Translate the text
-  const handleTranslate = async () => {
+   // Translate the text
+   const handleTranslate = async () => {
     if (!sourceText.trim()) {
       setTargetText("");
-      setChatGPTResponse(""); // Clear previous response if any
+      setChatGPTResponse("");
       return;
     }
+
+    setLoading(true);
 
     try {
       const translatedText = await translateText(
@@ -62,12 +67,15 @@ export const TranslateScreen = () => {
         targetLanguage.code
       );
       setTargetText(translatedText);
-      // Now call Dialogflow function
+
       const response = await sendToChatGPT(sourceText, translatedText);
-      setChatGPTResponse(response); // Update state with Dialogflow response
+      setChatGPTResponse(response);
     } catch (error) {
       console.error("Error during translation:", error);
       setTargetText("Translation failed. Please try again.");
+      setChatGPTResponse("Failed to generate breakdown.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -260,17 +268,15 @@ export const TranslateScreen = () => {
           {/* Word Context and Breakdown Section */}
           <View style={styles.contextSection}>
             <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
-            {chatGPTResponse ? (
-              <View style={styles.contextCard}>
-                <Text style={styles.contextText}>{chatGPTResponse}</Text>
-              </View>
-            ) : (
-              <View style={styles.contextCard}>
+            <View style={styles.contextCard}>
+              {loading ? (
+                <ActivityIndicator size="small" color={colors.blue} />
+              ) : (
                 <Text style={styles.contextText}>
-                  No detailed breakdown available.
+                  {chatGPTResponse || "No detailed breakdown available."}
                 </Text>
-              </View>
-            )}
+              )}
+            </View>
           </View>
         </ScrollView>
 
@@ -361,34 +367,6 @@ const styles = StyleSheet.create({
   languageLabel: {
     fontSize: 16,
     color: colors.lightGray,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    paddingVertical: 100,
-    paddingHorizontal: 20,
-  },
-  modalContent: {
-    backgroundColor: colors.darkGray,
-    marginHorizontal: 20,
-    borderRadius: 10,
-    padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: colors.white,
-  },
-  languageItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightGray,
-  },
-  languageText: {
-    fontSize: 18,
-    color: colors.white,
   },
   textControls: {
     flexDirection: "row",
