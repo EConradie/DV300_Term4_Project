@@ -18,6 +18,7 @@ import { languages } from "../languages";
 import { playAudio } from "../../services/ttsService";
 import { RecordModal } from "../modals/RecordModal";
 import { sendToChatGPT } from "../../services/chatGPTService";
+import { LanguageModal } from "../modals/LanguageModal";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -101,36 +102,6 @@ export const TranslateScreen = () => {
     setSourceLanguage(targetLanguage);
     setTargetLanguage(tempLang);
   };
-
-  // Render Modal Language Selector
-  const renderLanguageModal = ({
-    isVisible,
-    onClose,
-    onSelectLanguage,
-  }: renderLanguageModalProps) => (
-    <Modal visible={isVisible} transparent={true} animationType="slide">
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Select Language</Text>
-          <FlatList
-            data={languages}
-            keyExtractor={(item) => item.code}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.languageItem}
-                onPress={() => {
-                  onSelectLanguage(item);
-                  onClose();
-                }}
-              >
-                <Text style={styles.languageText}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      </View>
-    </Modal>
-  );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -303,17 +274,21 @@ export const TranslateScreen = () => {
           </View>
         </ScrollView>
 
-        {/* Modals for selecting languages */}
-        {renderLanguageModal({
-          isVisible: isSourceLanguageModalVisible,
-          onClose: () => setSourceLanguageModalVisible(false),
-          onSelectLanguage: (language) => setSourceLanguage(language),
-        })}
-        {renderLanguageModal({
-          isVisible: isTargetLanguageModalVisible,
-          onClose: () => setTargetLanguageModalVisible(false),
-          onSelectLanguage: (language) => setTargetLanguage(language),
-        })}
+        {/* Source Language Modal */}
+        <LanguageModal
+          isVisible={isSourceLanguageModalVisible}
+          onClose={() => setSourceLanguageModalVisible(false)}
+          onSelectLanguage={setSourceLanguage}
+          languages={languages}
+        />
+
+        {/* Target Language Modal */}
+        <LanguageModal
+          isVisible={isTargetLanguageModalVisible}
+          onClose={() => setTargetLanguageModalVisible(false)}
+          onSelectLanguage={setTargetLanguage}
+          languages={languages}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
