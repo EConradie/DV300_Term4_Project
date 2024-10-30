@@ -11,10 +11,12 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
+import { handleLogin } from "../../../services/authService";
+import { User } from "../../../components/models";
 
 interface LoginModalProps {
   isVisible: boolean;
@@ -22,7 +24,6 @@ interface LoginModalProps {
 }
 
 export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -30,22 +31,18 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
   const [password, setPassword] = useState("");
 
   const login = () => {
+    handleLogin({ email, password });
     setLoadingSubmit(true);
-    onClose();
   };
 
   return (
-    
     <Modal
       visible={isVisible}
       transparent
       animationType="slide"
       onRequestClose={onClose}
     >
-    <View style={LoginStyles.modalBackground}>
-      {isLoading ? (
-        <ActivityIndicator size="large" color={colors.orange} />
-      ) : (
+      <View style={LoginStyles.modalBackground}>
         <View style={LoginStyles.modalContainer}>
           {/* EMAIL INPUT */}
           <View style={InputStyle.container}>
@@ -105,14 +102,12 @@ export const LoginModal = ({ isVisible, onClose }: LoginModalProps) => {
             <Text style={LoginStyles.underlineText}>
               Don't have an account?
             </Text>
-            <Pressable onPress={() => onClose()}
-              >
+            <Pressable onPress={() => onClose()}>
               <Text style={LoginStyles.underlineButtonText}>Sign up.</Text>
             </Pressable>
           </View>
         </View>
-      )}
-    </View>
+      </View>
     </Modal>
   );
 };

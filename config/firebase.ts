@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
   authDomain: "terpreter-818c9.firebaseapp.com",
   projectId: "terpreter-818c9",
   storageBucket: "terpreter-818c9.appspot.com",

@@ -6,13 +6,7 @@ import {
 import { auth } from "../config/firebase";
 import { db } from "../config/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-
-interface User {
-  uid: string;
-  username: string;
-  email: string;
-  password: string;
-}
+import { User } from "../components/models";
 
 export const handleLogin = ({ email, password } : User ) => {
   signInWithEmailAndPassword(auth, email, password)

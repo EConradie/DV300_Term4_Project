@@ -8,6 +8,7 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,6 +27,11 @@ export const RegisterScreen = () => {
     setIsLoginModalVisible(false);
   };
 
+  const switchModal = () => {
+    setIsLoginModalVisible(!isLoginModalVisible);
+    setIsSignupModalVisible(!isSignupModalVisible);
+  };
+
   const openSignupModal = () => {
     setIsSignupModalVisible(true);
   };
@@ -34,17 +40,23 @@ export const RegisterScreen = () => {
     setIsSignupModalVisible(false);
   };
 
+  const closeModals = () => {
+    setIsLoginModalVisible(false);
+    setIsSignupModalVisible(false);
+  };
+
   return (
     <View style={RegisterStyles.background}>
       <View style={RegisterStyles.container}>
         {/* TEXT */}
-        <View style={RegisterStyles.textContainer}>
-          <Text style={RegisterStyles.titleText}>Get Started!</Text>
-          <Text style={RegisterStyles.text}>
-            Best place to translate and learn!
-          </Text>
-        </View>
-
+        <TouchableWithoutFeedback onPress={closeModals}>
+          <View style={RegisterStyles.textContainer}>
+            <Text style={RegisterStyles.titleText}>Get Started!</Text>
+            <Text style={RegisterStyles.text}>
+              Best place to translate and learn!
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
         {/* LOGO */}
         <View style={RegisterStyles.logoContainer}>
           <Image
@@ -62,18 +74,20 @@ export const RegisterScreen = () => {
             <Text style={RegisterStyles.buttonTextLogin}>LOG IN</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={RegisterStyles.buttonSignup} onPress={openSignupModal}>
+          <TouchableOpacity
+            style={RegisterStyles.buttonSignup}
+            onPress={openSignupModal}
+          >
             <Text style={RegisterStyles.buttonTextSignup}>SIGN UP</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Login Modal */}
-      <LoginModal isVisible={isLoginModalVisible} onClose={closeLoginModal} />
+      <LoginModal isVisible={isLoginModalVisible} onClose={switchModal} />
 
       {/* Signup Modal */}
-      <SignupModal isVisible={isSignupModalVisible} onClose={closeSignupModal} />
-
+      <SignupModal isVisible={isSignupModalVisible} onClose={switchModal} />
     </View>
   );
 };

@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { colors } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
+import { handleSignup } from "../../../services/authService";
 
 interface SignupModalProps {
   isVisible: boolean;
@@ -22,7 +23,6 @@ interface SignupModalProps {
 }
 
 export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -31,8 +31,8 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
   const [username, setUsername] = useState('');
 
   const signup = () => {
-    setLoadingSubmit(false);
-    onClose();
+    handleSignup({ username, email, password });
+    setLoadingSubmit(true);
   };
 
   return (
@@ -44,9 +44,6 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
       onRequestClose={onClose}
     >
     <View style={SignupStyles.modalBackground}>
-      {isLoading ? (
-        <ActivityIndicator size="large" color={colors.orange} />
-      ) : (
         <View style={SignupStyles.modalContainer}>
 
           {/* USERNAME INPUT */}
@@ -129,7 +126,6 @@ export const SignupModal = ({ isVisible, onClose }: SignupModalProps) => {
             </Pressable>
           </View>
         </View>
-      )}
     </View>
     </Modal>
   );

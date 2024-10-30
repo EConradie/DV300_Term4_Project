@@ -278,10 +278,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.black,
     paddingHorizontal: 20,
-    paddingVertical: 20,
   },
   header: {
-    marginTop: 50,
     alignItems: "center",
   },
   title: {
