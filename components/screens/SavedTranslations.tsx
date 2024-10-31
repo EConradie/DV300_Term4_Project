@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -9,28 +9,28 @@ import {
 import { colors } from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { Translation } from "../models";
+import { getTranslationsByUser } from "../../services/dbService";
+import { auth } from "../../config/firebase";
 
 export const SavedTranslations = () => {
   const navigation = useNavigation();
-  const [savedTranslations, setSavedTranslations] = useState<Translation[]>([]);
+  const [translations, setTranslations] = useState<Translation[]>([]);
 
-  useEffect(() => {
-    const loadSavedTranslations = async () => {
-      const storedTranslations : Translation[] = [
-        {
-          id: "1",
-          sourceLanguage: "English",
-          targetLanguage: "Spanish",
-          sourceText: "Hello",
-          targetText: "Hola",
-          date: "2023-11-05",
-          context: "This is a test translation",
-        },
-      ];
-      setSavedTranslations(storedTranslations);
+  useMemo(() => {
+    const fetchTranslations = async () => {
+      const userId = auth.currentUser?.uid;
+      if (!userId) return;
+
+      try {
+        const data = await getTranslationsByUser(userId);
+        setTranslations(data);
+      } catch (error) {
+        console.error("Error fetching translations:", error);
+      }
     };
-    loadSavedTranslations();
-  }, []);
+
+    fetchTranslations();
+  }, [translations]);
 
   const renderItem = ({ item }: { item: Translation }) => (
     <TouchableOpacity
@@ -39,14 +39,11 @@ export const SavedTranslations = () => {
         navigation.navigate("DetailedTranslation", { translation: item })
       }
     >
-      <View style={styles.cardHeader}>
-        <Text style={styles.languageText}>
-          {item.sourceLanguage} ➔ {item.targetLanguage}
-        </Text>
-        <Text style={styles.dateText}>{item.date}</Text>
-      </View>
       <Text style={styles.translationText}>
-        {item.sourceText} ➔ {item.targetText}
+        {item.sourceLanguage} ➔ {item.targetLanguage}
+      </Text>
+      <Text style={styles.dateText}>
+        {new Date(item.date).toLocaleString()}
       </Text>
     </TouchableOpacity>
   );
@@ -55,10 +52,10 @@ export const SavedTranslations = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Saved Translations</Text>
       <FlatList
-        data={savedTranslations}
-        keyExtractor={(item) => item.id}
+        style={styles.list}
+        data={translations}
         renderItem={renderItem}
-        contentContainerStyle={styles.list}
+        keyExtractor={(item) => item.id || ""}
       />
     </View>
   );
@@ -84,10 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   languageText: {
     fontSize: 16,

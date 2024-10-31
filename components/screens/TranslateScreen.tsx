@@ -10,7 +10,7 @@ import {
   FlatList,
   Keyboard,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { colors } from "../styles";
@@ -20,6 +20,9 @@ import { playAudio } from "../../services/ttsService";
 import { RecordModal } from "../modals/RecordModal";
 import { sendToChatGPT } from "../../services/chatGPTService";
 import { LanguageModal } from "../modals/LanguageModal";
+import { saveTranslation } from "../../services/dbService";
+import { auth } from "../../config/firebase";
+import { Translation } from "../models";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -32,7 +35,8 @@ export const TranslateScreen = () => {
   const [targetText, setTargetText] = useState("");
   const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const [sourceLanguage, setSourceLanguage] = useState({
     name: "English",
@@ -50,8 +54,8 @@ export const TranslateScreen = () => {
     useState(false);
   const [isRecordingModalVisible, setRecordingModalVisible] = useState(false);
 
-   // Translate the text
-   const handleTranslate = async () => {
+  // Translate the text
+  const handleTranslate = async () => {
     if (!sourceText.trim()) {
       setTargetText("");
       setChatGPTResponse("");
@@ -59,6 +63,7 @@ export const TranslateScreen = () => {
     }
 
     setLoading(true);
+    setSaved(false);
 
     try {
       const translatedText = await translateText(
@@ -76,6 +81,37 @@ export const TranslateScreen = () => {
       setChatGPTResponse("Failed to generate breakdown.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Save the translation
+  const handleSaveTranslation = async () => {
+    const userId = auth.currentUser?.uid;
+    if (!userId) return;
+
+    if (!sourceText.trim() || !targetText.trim()) {
+      alert("Please do a translating before saving.");
+      return;
+    }
+
+    setSaveLoading(true);
+
+    const translation: Translation = {
+      sourceLanguage: sourceLanguage.name,
+      targetLanguage: targetLanguage.name,
+      sourceText,
+      targetText,
+      context: chatGPTResponse,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      await saveTranslation(userId, translation);
+      setSaved(true);
+    } catch (error) {
+      alert("Failed to save translation.");
+    } finally {
+      setSaveLoading(false);
     }
   };
 
@@ -249,7 +285,7 @@ export const TranslateScreen = () => {
             </View>
           </View>
 
-          {/* Translate Button */}
+          {/* Translate/Save Button */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.translateButton}
@@ -257,11 +293,19 @@ export const TranslateScreen = () => {
             >
               <Text style={styles.translateButtonText}>Translate</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={styles.saveButton}
-              onPress={handleTranslate}
+              style={[styles.saveButton, saved && styles.savedButton]}
+              onPress={handleSaveTranslation}
+              disabled={saveLoading}
             >
-              <Text style={styles.saveButtonText}>Save</Text>
+              {saveLoading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : saved ? (
+                <Text style={styles.saveButtonText}>Saved ✓</Text>
+              ) : (
+                <Text style={styles.saveButtonText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -439,5 +483,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 18,
     fontWeight: "bold",
-  }
+  },
+  savedButton: {
+    backgroundColor: colors.darkGray,
+  },
 });

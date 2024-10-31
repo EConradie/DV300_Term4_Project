@@ -138,7 +138,7 @@ const InputStyle = StyleSheet.create({
     alignItems: "center",
     height: 60,
     width: 350,
-    borderRadius: 30,
+    borderRadius: 15,
     color: colors.black,
     backgroundColor: colors.lightGray,
     gap: 20,
@@ -195,7 +195,7 @@ const SignupStyles = StyleSheet.create({
     justifyContent: "center",
     width: 350,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 15,
     backgroundColor: colors.black,
   },
   buttonText: {
