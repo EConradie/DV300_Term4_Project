@@ -18,13 +18,21 @@ const Stack = createStackNavigator();
 function TranslateStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="SavedTranslation" component={SavedTranslations} options={{ headerShown: false }} />
-      <Stack.Screen name="DetailedTranslation" component={DetailedTranslation} options={{ headerShown: false }}   />
+      <Stack.Screen
+        name="SavedTranslation"
+        component={SavedTranslations}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="DetailedTranslation"
+        component={DetailedTranslation}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
 
-function LoggedInNavigation() {
+function Navigation() {
   return (
     <NavigationContainer theme={DarkTheme}>
       <Drawer.Navigator
@@ -68,5 +76,5 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  return isLoggedIn ? <LoggedInNavigation /> : <RegisterScreen />;
+  return isLoggedIn ? <Navigation /> : <RegisterScreen />;
 }

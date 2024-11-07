@@ -86,6 +86,11 @@ export const TranslateScreen = () => {
 
   // Save the translation
   const handleSaveTranslation = async () => {
+     
+    if (saved) {
+      return;
+    }
+
     const userId = auth.currentUser?.uid;
     if (!userId) return;
 

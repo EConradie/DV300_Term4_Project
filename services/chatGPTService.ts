@@ -26,22 +26,20 @@ export const sendToChatGPT = async (sourceText: string, targetText: string) => {
           { role: "system", content: "You are a language analysis assistant." },
           { role: "user", content: prompt },
         ],
-        max_tokens: 150, // Adjust based on response length needed
+        max_tokens: 150,
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`, // API key for auth
+          Authorization: `Bearer ${OPENAI_API_KEY}`, 
           "Content-Type": "application/json",
         },
       }
     );
 
-    // Extract and return the response text
     console.log("ChatGPT Response:", response.data);
     console.log(response.data.choices[0].message.content);
     return response.data.choices[0].message.content;
   } catch (error) {
-    // Improved error handling to understand specific issues
     if (axios.isAxiosError(error)) {
       console.error(
         "Error communicating with ChatGPT:",
@@ -50,6 +48,6 @@ export const sendToChatGPT = async (sourceText: string, targetText: string) => {
     } else {
       console.error("Unexpected Error:", error);
     }
-    throw error; // Rethrow error to be handled by caller if necessary
+    throw error;
   }
 };
