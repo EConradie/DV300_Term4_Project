@@ -26,6 +26,19 @@ Terpreter is a contextualized translator app designed to provide both direct tra
 - **Backend**: Firebase (Authentication, Firestore Database)
 - **APIs**: Google Cloud (Translation, Text-to-Speech, Speech-to-Text), OpenAI (Contextual Translation)
 
+## Database Structure
+
+![Data structure](https://github.com/EConradie/DV300_Term4_Project/blob/main/assets/database.png?raw=true)
+
+## Mockups
+
+![Mockup](https://github.com/EConradie/DV300_Term4_Project/blob/main/assets/mockup1.png?raw=true)
+![Mockup](https://github.com/EConradie/DV300_Term4_Project/blob/main/assets/mockup2.png?raw=true)
+
+## Demonstration Video
+
+https://drive.google.com/file/d/1sFK3pPXHia7ievcHFCaDtWfsMf_SikJE/view?usp=sharing
+
 ## Getting Started
 
 ### Prerequisites
