@@ -23,6 +23,7 @@ import { LanguageModal } from "../modals/LanguageModal";
 import { saveTranslation } from "../../services/dbService";
 import { auth } from "../../config/firebase";
 import { Translation } from "../models";
+import  RenderContext  from "../RenderContext";
 
 interface renderLanguageModalProps {
   isVisible: boolean;
@@ -153,48 +154,47 @@ export const TranslateScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Terpreter</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Terpreter</Text>
 
-          {/* Language Selectors with Swap */}
-          <View style={styles.languageSelectorContainer}>
-            {/* Source Language Selector */}
-            <TouchableOpacity
-              onPress={() => setSourceLanguageModalVisible(true)}
-              style={styles.languageSelector}
-            >
-              <Text style={styles.languageSelectorText}>
-                {sourceLanguage.name}
-              </Text>
-            </TouchableOpacity>
+        <View style={styles.languageSelectorContainer}>
+          <TouchableOpacity
+            onPress={() => setSourceLanguageModalVisible(true)}
+            style={styles.languageSelector}
+          >
+            <Text style={styles.languageSelectorText}>
+              {sourceLanguage.name}
+            </Text>
+          </TouchableOpacity>
 
-            {/* Swap Icon */}
-            <TouchableOpacity onPress={swapLanguages} style={styles.swapIcon}>
-              <Ionicons
-                name="swap-horizontal-outline"
-                size={32}
-                color={colors.white}
-              />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={swapLanguages} style={styles.swapIcon}>
+            <Ionicons
+              name="swap-horizontal-outline"
+              size={32}
+              color={colors.white}
+            />
+          </TouchableOpacity>
 
-            {/* Target Language Selector */}
-            <TouchableOpacity
-              onPress={() => setTargetLanguageModalVisible(true)}
-              style={styles.languageSelector}
-            >
-              <Text style={styles.languageSelectorText}>
-                {targetLanguage.name}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={() => setTargetLanguageModalVisible(true)}
+            style={styles.languageSelector}
+          >
+            <Text style={styles.languageSelectorText}>
+              {targetLanguage.name}
+            </Text>
+          </TouchableOpacity>
         </View>
+      </View>
 
-        {/* Input and Translation Comparison Section */}
-        <ScrollView style={styles.inputSection}>
-          {/* Source Language Input */}
+      <ScrollView
+        style={styles.inputSection}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+             {/* Source Language Input */}
           <View style={styles.inputContainer}>
             <View style={styles.languageContainer}>
               <Text style={styles.languageLabel}>{sourceLanguage.name}</Text>
@@ -242,18 +242,14 @@ export const TranslateScreen = () => {
             </View>
           </View>
 
-          {/* Swap Icon */}
-          <View style={styles.swapContainer}>
-            <TouchableOpacity onPress={swapLanguages} style={styles.swapButton}>
-              <Ionicons
-                name="swap-vertical-outline"
-                size={32}
-                color={colors.white}
-              />
-            </TouchableOpacity>
-          </View>
+            {/* Swap Icon */}
+            <View style={styles.swapContainer}>
+              <TouchableOpacity onPress={swapLanguages} style={styles.swapButton}>
+                <Ionicons name="swap-vertical-outline" size={32} color={colors.white} />
+              </TouchableOpacity>
+            </View>
 
-          {/* Target Language Input */}
+            {/* Target Language Input */}
           <View style={styles.inputContainer}>
             <View style={styles.languageContainer}>
               <Text style={styles.languageLabel}>{targetLanguage.name}</Text>
@@ -261,7 +257,6 @@ export const TranslateScreen = () => {
 
             <View style={styles.textInputContainer}>
               <TextInput
-                placeholder="Type here..."
                 placeholderTextColor={colors.gray}
                 multiline={true}
                 value={targetText}
@@ -290,62 +285,45 @@ export const TranslateScreen = () => {
             </View>
           </View>
 
-          {/* Translate/Save Button */}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.translateButton}
-              onPress={handleTranslate}
-            >
-              <Text style={styles.translateButtonText}>Translate</Text>
-            </TouchableOpacity>
+            {/* Translate/Save Button */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.translateButton}
+                onPress={handleTranslate}
+              >
+                <Text style={styles.translateButtonText}>Translate</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.saveButton, saved && styles.savedButton]}
-              onPress={handleSaveTranslation}
-              disabled={saveLoading}
-            >
-              {saveLoading ? (
-                <ActivityIndicator size="small" color={colors.white} />
-              ) : saved ? (
-                <Text style={styles.saveButtonText}>Saved ✓</Text>
-              ) : (
-                <Text style={styles.saveButtonText}>Save</Text>
-              )}
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={[styles.saveButton, saved && styles.savedButton]}
+                onPress={handleSaveTranslation}
+                disabled={saveLoading}
+              >
+                {saveLoading ? (
+                  <ActivityIndicator size="small" color={colors.white} />
+                ) : saved ? (
+                  <Text style={styles.saveButtonText}>Saved ✓</Text>
+                ) : (
+                  <Text style={styles.saveButtonText}>Save</Text>
+                )}
+              </TouchableOpacity>
+            </View>
 
-          {/* Word Context and Breakdown Section */}
-          <View style={styles.contextSection}>
-            <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
-            <View style={styles.contextCard}>
-              {loading ? (
-                <ActivityIndicator size="small" color={colors.blue} />
-              ) : (
-                <Text style={styles.contextText}>
-                  {chatGPTResponse || "No detailed breakdown available."}
-                </Text>
-              )}
+            {/* Word Context and Breakdown Section */}
+            <View style={styles.contextSection}>
+              <Text style={styles.contextTitle}>Detailed Word Breakdown</Text>
+              <View style={styles.contextCard}>
+                {loading ? (
+                  <ActivityIndicator size="small" color={colors.blue} />
+                ) : (
+                  <RenderContext context={chatGPTResponse || ""} />
+                )}
+              </View>
             </View>
           </View>
-        </ScrollView>
-
-        {/* Source Language Modal */}
-        <LanguageModal
-          isVisible={isSourceLanguageModalVisible}
-          onClose={() => setSourceLanguageModalVisible(false)}
-          onSelectLanguage={setSourceLanguage}
-          languages={languages}
-        />
-
-        {/* Target Language Modal */}
-        <LanguageModal
-          isVisible={isTargetLanguageModalVisible}
-          onClose={() => setTargetLanguageModalVisible(false)}
-          onSelectLanguage={setTargetLanguage}
-          languages={languages}
-        />
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </View>
   );
 };
 

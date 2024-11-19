@@ -1,16 +1,29 @@
+// Updated DetailedTranslation.tsx
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { colors } from "../styles";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { Translation } from "../models";
+import RenderContext from "../RenderContext"; // Import the new component
 
-type RouteParams = {
-  translation: Translation;
+type RootStackParamList = {
+  DetailedTranslation: { translation: Translation };
 };
 
 export const DetailedTranslation = () => {
-  const route = useRoute<RouteProp<{ params: RouteParams }, "params">>();
+  const route = useRoute<RouteProp<RootStackParamList, "DetailedTranslation">>();
   const { translation } = route.params;
+
+  const formattedDate = new Date(translation.date).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const formattedTime = new Date(translation.date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <ScrollView style={styles.container}>
@@ -25,22 +38,24 @@ export const DetailedTranslation = () => {
 
       <View style={styles.section}>
         <Text style={styles.label}>Date</Text>
-        <Text style={styles.value}>{translation.date}</Text>
+        <Text style={styles.dateValue}>
+          {formattedDate} at {formattedTime}
+        </Text>
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.sectionBox}>
         <Text style={styles.label}>Source Text</Text>
-        <Text style={styles.value}>{translation.sourceText}</Text>
+        <Text style={styles.textBox}>{translation.sourceText}</Text>
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.sectionBox}>
         <Text style={styles.label}>Translated Text</Text>
-        <Text style={styles.value}>{translation.targetText}</Text>
+        <Text style={styles.textBox}>{translation.targetText}</Text>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.label}>Context & Breakdown</Text>
-        <Text style={styles.value}>{translation.context}</Text>
+        <RenderContext context={translation.context || ""} />
       </View>
     </ScrollView>
   );
@@ -53,22 +68,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     color: colors.white,
     marginVertical: 20,
+    textAlign: "center",
   },
   section: {
-    marginBottom: 15,
+    marginBottom: 20,
+  },
+  sectionBox: {
+    marginBottom: 20,
+    backgroundColor: colors.darkGray,
+    padding: 15,
+    borderRadius: 10,
   },
   label: {
     fontSize: 16,
     color: colors.lightGray,
     fontWeight: "bold",
+    marginBottom: 5,
   },
   value: {
     fontSize: 18,
     color: colors.white,
+    fontWeight: "500",
+  },
+  dateValue: {
+    fontSize: 16,
+    color: colors.lightGray,
+    fontStyle: "italic",
+  },
+  textBox: {
+    fontSize: 18,
+    color: colors.white,
+    backgroundColor: colors.black,
+    padding: 10,
+    borderRadius: 5,
     marginTop: 5,
   },
 });
